@@ -11,7 +11,7 @@ head(d)
 ```
 
 ```{r}
-#this dataframe contains only values from the P. palmata species
+#this dataframe contains only values from the P. palmata species. I separated them because the paper states that each experiment and analysis for the 2 species was done separately.  
 d1 <- data.frame(d[1:227,])
 d1
 ```
@@ -54,10 +54,15 @@ m5 <- lm(data = d1, NPP.O2 ~ 1)
 
 This paper used forward selection and added predictor variables to make increasing more complex models to see which model fit best. 
 
+```{r}
+library(MASS)
+stepAIC(m1, direction = "both")
+```
+
 #Analysis 2: Finding the best model for respiration
 Respiration values in this paper were taken as the difference in dissolved oxygen between measurements taken at the start of the experiment and the end of the dark incubation period. 
 
-The respiration analysis was done in a similar manner to the NPP analysis. 
+The respiration analysis was done in a similar manner to the NPP analysis and again the first step was to use the qq plot to determine if the data was normal, and it was not. 
 
 ```{r}
 par(mfrow = c(2,2))
