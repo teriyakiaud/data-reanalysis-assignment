@@ -1,0 +1,67 @@
+---
+title: "Analysis Replication"
+Author: Audrey Tjahjadi
+output: html_document
+---
+
+```{r}
+f <-"C:/Users/Audrey/Desktop/Nunes_2015(1).csv"
+d <- read.csv(f, header = TRUE)
+head(d)
+```
+
+```{r}
+#this dataframe contains only values from the P. palmata species
+d1 <- data.frame(d[1:227,])
+d1
+```
+```{r}
+#this dataframe contains only values from S. latissima
+d2 <- data.frame(d[228:386,])
+d2
+```
+
+#Analysis 1: Determining the most useful model for NPP
+## Assessment of Normality
+
+Net Primary Productivity in this paper was determined as the difference in dissolved oxygen concentrations between measurements taken at the start of the experiment and at the end of the light incubation period.
+First, as in the paper, I used a qqnorm plot along with a histogram to show that the data for NPP is clearly not linear or normal.  
+
+```{r}
+par(mfrow = c(2,2))
+hist(d1$NPP.O2, xlab = "Difference in O2 (NPP)", main = "NPP of P. palmata")
+qqnorm(d1$NPP.O2, main = "NPP of P. palmata")
+hist(d2$NPP.O2, xlab = "Difference in O2 (NPP)", main = "NPP of S. latissima")
+qqnorm(d2$NPP.O2, main = "NPP of S. latissima")
+```
+
+##Comparing possible models using AIC and log likelihoods
+
+In the paper, it seemed to me that the indicator of 'OA' was the pH (Potentiometric) measurement and not the pH calculated by seacarb though this was not made clear. Therefore, I used the potentiometric values for my analysis. The 'Treat' column may also have been used for OA as this shows the concentration of CO2 in each sample, but since these values matched up with the pH values, I used the pH values instead. 
+
+###Models for P. palmata NPP
+
+```{r}
+#all of the possible models that were considered in the study 
+#Duration is Time and Potentiometric.pH is OA as they appear in the paper.
+
+m1 <- lm(data = d1, NPP.O2 ~ Duration * Potentiometric.pH)
+m2 <- lm(data = d1, NPP.O2 ~ Duration + Potentiometric.pH)
+m3 <- lm(data = d1, NPP.O2 ~ Duration)
+m4 <- lm(data = d1, NPP.O2 ~ Potentiometric.pH)
+m5 <- lm(data = d1, NPP.O2 ~ 1)
+```
+
+
+# Analysis 2: Finding the best model for respiration
+
+Respiration values in this paper were taken as the difference in dissolved oxygen between the 
+
+
+```{r}
+par(mfrow = c(1,2))
+hist(d$Resp.O2, xlab = "Change in Dissolved Oxygen (NPP)", main = "Histogram of NPP")
+qqnorm(d$Resp.O2, main = "Net Primary Productivity")
+```
+
+
