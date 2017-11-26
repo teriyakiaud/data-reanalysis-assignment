@@ -52,16 +52,19 @@ m4 <- lm(data = d1, NPP.O2 ~ Potentiometric.pH)
 m5 <- lm(data = d1, NPP.O2 ~ 1)
 ```
 
+This paper used forward selection and added predictor variables to make increasing more complex models to see which model fit best. 
 
-# Analysis 2: Finding the best model for respiration
+#Analysis 2: Finding the best model for respiration
+Respiration values in this paper were taken as the difference in dissolved oxygen between measurements taken at the start of the experiment and the end of the dark incubation period. 
 
-Respiration values in this paper were taken as the difference in dissolved oxygen between the 
-
+The respiration analysis was done in a similar manner to the NPP analysis. 
 
 ```{r}
-par(mfrow = c(1,2))
-hist(d$Resp.O2, xlab = "Change in Dissolved Oxygen (NPP)", main = "Histogram of NPP")
-qqnorm(d$Resp.O2, main = "Net Primary Productivity")
+par(mfrow = c(2,2))
+hist(d1$Resp.O2, xlab = "Change in Dissolved O2 (Respiration)", main = "Respiration of P. palmata")
+qqnorm(d1$Resp.O2, main = "Net Primary Productivity")
+hist(d2$Resp.O2, xlab = "Change in Dissolved O2 (Respiration)", main = "Respiration of S. latissima")
+qqnorm(d2$Resp.O2, main = "Net Primary Productivity")
 ```
 
 
