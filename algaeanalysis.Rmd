@@ -5,7 +5,7 @@ output: html_document
 ---
 #Intro and Description
 
-In their study, Nunes et al. (2016) examined 2 different types of non-calcifying algae to see the effect of ocean acidification on different aspects on their growth and productivity. They assessed variables such as net primary production, respiration, levels of the compound DMSP, and physical growth. 
+In their study, Nunes et al. (2016) examined 2 different types of non-calcifying algae to see the effect of ocean acidification on different aspects on their growth and productivity. They assessed variables such as net primary production, respiration, levels of the compound DMSP, and physical growth. They studied the algal species, P. palmata and S. latissima over the course of 4 weeks. They gathered 60 P. palmata individuals and 36 S. latissima individuals harvested from the wild and then placed them in tanks with controlled conditions. They collected data at the beginning of the experimental period (time=0) after an acclimatization period and also collected data at the end of the period (time=4). In this reanalysis, I will be looking at Nunes et al. analyses of net primary production, respiration, and DMSP. 
 
 ```{r}
 f <-"https://raw.githubusercontent.com/teriyakiaud/data-reanalysis-assignment/master/Nunes_2015(1).csv"
