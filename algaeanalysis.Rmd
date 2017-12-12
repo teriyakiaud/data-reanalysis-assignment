@@ -3,20 +3,25 @@ title: "Analysis Replication"
 Author: Audrey Tjahjadi
 output: html_document
 ---
+#Intro and Description
+
+In their study, Nunes et al. (2016) examined 2 different types of non-calcifying algae to see the effect of ocean acidification on different aspects on their growth and productivity. 
 
 ```{r}
-f <-"C:/Users/Audrey/Desktop/Nunes_2015(1).csv"
+f <-"https://raw.githubusercontent.com/teriyakiaud/data-reanalysis-assignment/master/Nunes_2015(1).csv"
 d <- read.csv(f, header = TRUE)
 head(d)
 ```
 
 ```{r}
 #this dataframe contains only values from the P. palmata species. I separated them because the paper states that each experiment and analysis for the 2 species was done separately.  
+
 d1 <- data.frame(d[1:227,])
 d1
 ```
 ```{r}
-#this dataframe contains only values from S. latissima
+#this dataframe contains only values from S. latissima for the reason stated above.
+
 d2 <- data.frame(d[228:386,])
 d2
 ```
@@ -33,6 +38,8 @@ hist(d1$NPP.O2, xlab = "Difference in O2 (NPP)", main = "NPP of P. palmata")
 qqnorm(d1$NPP.O2, main = "NPP of P. palmata")
 hist(d2$NPP.O2, xlab = "Difference in O2 (NPP)", main = "NPP of S. latissima")
 qqnorm(d2$NPP.O2, main = "NPP of S. latissima")
+
+#we can see that the data is clearly not normal. 
 ```
 
 ##Comparing possible models using AIC and log likelihoods
@@ -40,6 +47,8 @@ qqnorm(d2$NPP.O2, main = "NPP of S. latissima")
 In the paper, it seemed to me that the indicator of 'OA' was the pH (Potentiometric) measurement and not the pH calculated by seacarb though this was not made clear. Therefore, I used the potentiometric values for my analysis. The 'Treat' column may also have been used for OA as this shows the concentration of CO2 in each sample, but since these values matched up with the pH values, I used the pH values instead. 
 
 ###Models for P. palmata NPP
+
+In this part of the paper, Nunes et al. considered several different models to see what affected net primary production. 
 
 ```{r}
 #all of the possible models that were considered in the study 
@@ -50,13 +59,53 @@ m2 <- lm(data = d1, NPP.O2 ~ Duration + Potentiometric.pH)
 m3 <- lm(data = d1, NPP.O2 ~ Duration)
 m4 <- lm(data = d1, NPP.O2 ~ Potentiometric.pH)
 m5 <- lm(data = d1, NPP.O2 ~ 1)
+
+#m5 is the simplest model and m1 the most complex
 ```
 
 This paper used forward selection and added predictor variables to make increasing more complex models to see which model fit best. 
 
 ```{r}
+m5 <- lm(data = d1, NPP.O2 ~ 1)
+summary(m5)
+```
+```{r}
+add1(m5, scope = .~. + Duration + Potentiometric.pH, test = "F")
+```
+```{r}
+m4<- update(m5, formula = .~. + Potentiometric.pH)
+summary(m4)
+```
+```{r}
+m3<- update(m5, formula = .~. + Duration)
+summary(m3)
+```
+
+```{r}
+add1(m3, scope = .~. + Duration + Potentiometric.pH, test = "F")
+
+#this is the best model
+```
+```{r}
+m2 <- update(m4, formula = .~. + Duration)
+summary(m2)
+```
+```{r}
+m1 <- update(m4, formula = .~. * Duration)
+summary(m1)
+```
+The results of this section show that the model I've named as m2 or NPP.O2 ~ Duration + Potentiometric.pH. THis matches up with the model that the authors of the paper used. Though we had different AIC values, they followed the same trend. 
+
+Here we can compare with the results of the paper in terms of NPP
+![](https://raw.githubusercontent.com/teriyakiaud/data-reanalysis-assignment/master/nunes.PNG)
+
+```{r}
+
+```
+
+```{r}
 library(MASS)
-stepAIC(m1, direction = "both")
+stepAIC(m5, direction = "both")
 ```
 
 #Analysis 2: Finding the best model for respiration
