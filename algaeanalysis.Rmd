@@ -170,7 +170,9 @@ Using AIC values, We see here that the best model for respiration in S. latissim
 
 #Analysis 3: Effects of Acidification and Time on DMSP concentration
 
-In this analysis, I will be showing that DMSP levels varied depending on sample location in S. latissima. DMSP is dimethylsulphoniopropionate, a compound that plays a role as an antioxidant and precursor to predator defense in algae. Nunes et al. state that little is currently known about the effect of acidification and increased CO2 levels on algal production of DMSP. They show in their study there does not seem to be any effect of acidification or time on DMSP production. 
+In this analysis, I will be showing that DMSP levels varied depending on sample location in S. latissima. DMSP is dimethylsulphoniopropionate, a compound that plays a role as an antioxidant and precursor to predator defense in algae. Nunes et al. state that little is currently known about the effect of acidification and increased CO2 levels on algal production of DMSP. They show in their study there does not seem to be any effect of acidification or time on DMSP production.
+
+##Determining the Correct Data to Analyze
 
 First, I use a boxplot to show that there is a significant difference in the amount of DMSP produced by S. latissima depending on where along the frond Nunes et al. collected samples from. 
 ```{r}
@@ -208,6 +210,7 @@ We can compare my results from the boxplot to the results that Nunes et al. foun
 
 This initial exploratory analysis showed them that it would be more useful to base the rest of their analyses regarding the effect of acidification and time on DMSP production on samples taken from the base of the frond rather than samples from the tip of the frond. 
 
+##Determining the Best Model and Analyzing Changes in DMSP Concentration
 Next, they looked at how acidification and time affected DMSP levels. They did this for both P. palmata and S. latissima but again, for the purpose of this reanalysis, I will only be looking at S. latissima. 
 ```{r}
 boxplot(DMSP ~ Duration, data = f1, xlab = "Time of Collection", ylab = "DMSP Levels", main = "DMSP levels at Base of Frond")
@@ -225,17 +228,35 @@ time2
 ```{r}
 dmmean1 <- mean(time1$DMSP, na.rm = TRUE)
 dmmean1
-sd1 <- sd(time1$DSMP, na.rm = TRUE)
 dmmean2 <- mean(time2$DMSP, na.rm = TRUE)
 dmmean2
-sd2 <- sd(time2$DMSP, na.rm = TRUE)
-n1 <- length(time1$DMSP)
-n2 <- length(time2$DMSP)
-mu <- 0
+
+#this is another quantification of what we see in the second boxplot above. We can see that there is no clear difference in the means of DMSP over time when comparing between week 0 and week 4. I will go further into this below. 
 ```
+
+Here I go over the models again for the variables affecting DMSP concentrations. These models are the same as for NPP and respiration, but we will see that the conclusions for the best model differ. 
+```{r}
+dm1 <- lm(data = f1, DMSP ~ Duration * Potentiometric.pH)
+dm2 <- lm(data = f1, DMSP ~ Duration + Potentiometric.pH)
+dm3 <- lm(data = f1, DMSP ~ Duration)
+dm4 <- lm(data = f1, DMSP ~ Potentiometric.pH)
+dm5 <- lm(data = f1, DMSP ~ 1)
+```
+```{r}
+stepAIC(dm1, direction = "both")
+
+#since I did very similar analyses above, I did not do the step-by-step forward selection for models as I did above. Instead I just used the stepAIC function.
+```
+The results of the stepAIC show us that the best model to use is actually the simplest one (or model dm5) and that acidification and time do not seem to have an effect on DMSP concentrations. Again, we can compare this to the results from Nunes et al.
+
+![](https://raw.githubusercontent.com/teriyakiaud/data-reanalysis-assignment/master/table%205.PNG)
+
+Finally, I use a simple t-test to show that there is no significance between the concentrations of DMSP from week 0 to week 4. 
+
 ```{r}
 t <- t.test(x = time1$DMSP, y = time2$DMSP, mu = 0, alternative = "two.sided")
 t
 
 #we can use the t-test here to show that there really is not a significant change. The output p-value is 0.5915 which is insignificant. 
 ```
+Altogether, this analysis leads to the conclusion that in S. latissima, there is no effect of CO2/acidification on DMSP production and concentration. 
