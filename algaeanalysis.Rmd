@@ -130,6 +130,8 @@ qqnorm(d2$Resp.O2, main = "Respiration of S. latissima")
 
 Just like with NPP, the qq plots and histograms show us that the data for respiration in S.latissima is NOT linear. 
 
+##Models for Respiration in S. latissima
+
 ```{r}
 #again, here are the potential models with s5 representing the least complex and s1 the most complex.
 
@@ -166,7 +168,7 @@ Using AIC values, We see here that the best model for respiration in S. latissim
 
 ![](https://raw.githubusercontent.com/teriyakiaud/data-reanalysis-assignment/master/nunes.PNG)
 
-#Analysis 3
+#Analysis 3: Effects of Acidification and Time on DMSP concentration
 
 In this analysis, I will be showing that DMSP levels varied depending on sample location in S. latissima. DMSP is dimethylsulphoniopropionate, a compound that plays a role as an antioxidant and precursor to predator defense in algae. Nunes et al. state that little is currently known about the effect of acidification and increased CO2 levels on algal production of DMSP. They show in their study there does not seem to be any effect of acidification or time on DMSP production. 
 
@@ -200,11 +202,17 @@ mean2
 
 #this is a simple quantification of what we see in the first boxplot. We can see that the mean DMSP concentration for the base of the frond is much greater than for the tip of the frond. 
 ```
+We can compare my results from the boxplot to the results that Nunes et al. found regarding the differing concentration levels. 
 
+![](https://raw.githubusercontent.com/teriyakiaud/data-reanalysis-assignment/master/fig%203.PNG)
+
+This initial exploratory analysis showed them that it would be more useful to base the rest of their analyses regarding the effect of acidification and time on DMSP production on samples taken from the base of the frond rather than samples from the tip of the frond. 
+
+Next, they looked at how acidification and time affected DMSP levels. They did this for both P. palmata and S. latissima but again, for the purpose of this reanalysis, I will only be looking at S. latissima. 
 ```{r}
-par(mfrow = c(2,2))
 boxplot(DMSP ~ Duration, data = f1, xlab = "Time of Collection", ylab = "DMSP Levels", main = "DMSP levels at Base of Frond")
-boxplot(DMSP ~ Duration, data = f2, xlab = "Time of Collection", ylab = "DMSP Levels", main = "DMSP levels at Tip of Frond")
-```
 
+#this boxplot helps to visually represent that no significant change occured between the DMSP levels collected at time 0 to time 4 (4 weeks after).
+```
+```{r}
 
