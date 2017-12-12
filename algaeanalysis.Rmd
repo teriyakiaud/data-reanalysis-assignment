@@ -5,7 +5,7 @@ output: html_document
 ---
 #Intro and Description
 
-In their study, Nunes et al. (2016) examined 2 different types of non-calcifying algae to see the effect of ocean acidification on different aspects on their growth and productivity. 
+In their study, Nunes et al. (2016) examined 2 different types of non-calcifying algae to see the effect of ocean acidification on different aspects on their growth and productivity. They assessed variables such as net primary production, respiration, levels of the compound DMSP, and physical growth. 
 
 ```{r}
 f <-"https://raw.githubusercontent.com/teriyakiaud/data-reanalysis-assignment/master/Nunes_2015(1).csv"
@@ -48,7 +48,7 @@ In the paper, it seemed to me that the indicator of 'OA' was the pH (Potentiomet
 
 ###Models for P. palmata NPP
 
-In this part of the paper, Nunes et al. considered several different models to see what affected net primary production. 
+In this part of the paper, Nunes et al. considered several different models to see what affected net primary production. They did this for both species, but for the purpose of this reanalysis, I am only looking at P. palmata. 
 
 ```{r}
 #all of the possible models that were considered in the study 
@@ -94,31 +94,74 @@ summary(m2)
 m1 <- update(m4, formula = .~. * Duration)
 summary(m1)
 ```
-The results of this section show that the model I've named as m2 or NPP.O2 ~ Duration + Potentiometric.pH. THis matches up with the model that the authors of the paper used. Though we had different AIC values, they followed the same trend. 
-
-Here we can compare with the results of the paper in terms of NPP
-![](https://raw.githubusercontent.com/teriyakiaud/data-reanalysis-assignment/master/nunes.PNG)
-
-```{r}
-
-```
+In addition to doing the additions by hand above, I also used the stepAIC function below to more clearly show which is the best model. 
 
 ```{r}
 library(MASS)
-stepAIC(m5, direction = "both")
+stepAIC(m1, direction = "both")
 ```
+```{r}
+logLik(m2)
+logLik(m1)
+#there is no significant increase in log-likelihood from model m2 (our best model) to m1 (the most complex)
+```
+The results of this section show that the model I've named as m2 or NPP.O2 ~ Duration + Potentiometric.pH is the best model to use. THis matches up with the model that the authors of the paper used. Though we had different AIC values, they followed the same trend. 
+
+Here we can compare with the results of the paper in terms of NPP and see that Nunes et al. used the same model for NPP. 
+
+![](https://raw.githubusercontent.com/teriyakiaud/data-reanalysis-assignment/master/nunes.PNG)
+
+This ultimately shows that both time and ocean acidification are important factors affecting NPP in P. palmata. 
 
 #Analysis 2: Finding the best model for respiration
 Respiration values in this paper were taken as the difference in dissolved oxygen between measurements taken at the start of the experiment and the end of the dark incubation period. 
 
-The respiration analysis was done in a similar manner to the NPP analysis and again the first step was to use the qq plot to determine if the data was normal, and it was not. 
+The respiration analysis was done in a similar manner to the NPP analysis and again the first step was to use the qq plot to determine if the data was normal. 
+
+For the purpose of this reanalysis, I will be looking at only S. latissima during this part. 
 
 ```{r}
 par(mfrow = c(2,2))
-hist(d1$Resp.O2, xlab = "Change in Dissolved O2 (Respiration)", main = "Respiration of P. palmata")
-qqnorm(d1$Resp.O2, main = "Net Primary Productivity")
+hist(d2$Resp.O2, xlab = "Change in Dissolved O2 (Respiration)", main = "Respiration of P. palmata")
+qqnorm(d2$Resp.O2, main = "DMSP of P. palmata")
 hist(d2$Resp.O2, xlab = "Change in Dissolved O2 (Respiration)", main = "Respiration of S. latissima")
-qqnorm(d2$Resp.O2, main = "Net Primary Productivity")
+qqnorm(d2$Resp.O2, main = "Respiration of S. latissima")
 ```
+
+Just like with NPP, the qq plots and histograms show us that the data for respiration in S.latissima is NOT linear. 
+
+```{r}
+#again, here are the potential models with s5 representing the least complex and s1 the most complex.
+
+s1 <- lm(data = d2, Resp.O2 ~ Duration * Potentiometric.pH)
+s2 <- lm(data = d2, Resp.O2 ~ Duration + Potentiometric.pH)
+s3 <- lm(data = d2, Resp.O2 ~ Duration)
+s4 <- lm(data = d2, Resp.O2 ~ Potentiometric.pH)
+s5 <- lm(data = d2, Resp.O2 ~ 1)
+```
+```{r}
+s5 <- lm(data = d2, Resp.O2 ~ 1)
+summary(s5)
+```
+```{r}
+add1(s5, scope = .~. + Duration + Potentiometric.pH, test = "F")
+```
+```{r}
+s4<- update(s5, formula = .~. + Potentiometric.pH)
+summary(s4)
+```
+```{r}
+s3<- update(s5, formula = .~. + Duration)
+summary(s3)
+```
+```{r}
+add1(s3, scope = .~. + Duration + Potentiometric.pH, test = "F")
+
+```
+```{r}
+s2 <- update(s4, formula = .~. + Duration)
+summary(s2)
+```
+We see here that the best model for respiration in S. latissima is one that takes into account both ocean acidification and time, just like we see in P. palmata for NPP. 
 
 
