@@ -105,7 +105,7 @@ logLik(m2)
 logLik(m1)
 #there is no significant increase in log-likelihood from model m2 (our best model) to m1 (the most complex)
 ```
-The results of this section show that the model I've named as m2 or NPP.O2 ~ Duration + Potentiometric.pH is the best model to use. THis matches up with the model that the authors of the paper used. Though we had different AIC values, they followed the same trend. 
+The results of this section show that the model I've named as m2 or NPP.O2 ~ Duration + Potentiometric.pH is the best model to use, according to both AIC values and log-likelihood values. THis matches up with the model that the authors of the paper used. Though we had different AIC values, they followed the same trend. 
 
 Here we can compare with the results of the paper in terms of NPP and see that Nunes et al. used the same model for NPP. 
 
@@ -162,6 +162,29 @@ add1(s3, scope = .~. + Duration + Potentiometric.pH, test = "F")
 s2 <- update(s4, formula = .~. + Duration)
 summary(s2)
 ```
-We see here that the best model for respiration in S. latissima is one that takes into account both ocean acidification and time, just like we see in P. palmata for NPP. 
+Using AIC values, We see here that the best model for respiration in S. latissima is one that takes into account both ocean acidification and time, just like we see in P. palmata for NPP. Again, we can compare this to the model that Nunes et. al used in their paper. 
+
+![](https://raw.githubusercontent.com/teriyakiaud/data-reanalysis-assignment/master/nunes.PNG)
+
+#Analysis 3
+
+In this analysis, I will be showing that DMSP levels varied depending on sample location in S. latissima. DMSP is dimethylsulphoniopropionate, a compound that plays a role as an antioxidant and precursor to predator defense in algae. Nunes et al. state that little is currently known about the effect of acidification and increased CO2 levels on algal production of DMSP. They show in their study that at least in S. latissima, there is a significant difference in DMSP production. 
+
+
+```{r}
+library(dplyr)
+f1 <- filter(d2, Position == "base of the frond")
+f1
+
+#i used the filter function here to separate the specific position along the frond that Nunes et al. collected DMSP data from. f1 shows data from the base of the frond.
+```
+
+```{r}
+f2 <- filter(d2, Position == "tip of the frond")
+f2
+
+#f2 shows DMSP data from the tip of the frond. 
+```
+
 
 
