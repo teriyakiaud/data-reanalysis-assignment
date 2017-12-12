@@ -168,8 +168,14 @@ Using AIC values, We see here that the best model for respiration in S. latissim
 
 #Analysis 3
 
-In this analysis, I will be showing that DMSP levels varied depending on sample location in S. latissima. DMSP is dimethylsulphoniopropionate, a compound that plays a role as an antioxidant and precursor to predator defense in algae. Nunes et al. state that little is currently known about the effect of acidification and increased CO2 levels on algal production of DMSP. They show in their study that at least in S. latissima, there is a significant difference in DMSP production. 
+In this analysis, I will be showing that DMSP levels varied depending on sample location in S. latissima. DMSP is dimethylsulphoniopropionate, a compound that plays a role as an antioxidant and precursor to predator defense in algae. Nunes et al. state that little is currently known about the effect of acidification and increased CO2 levels on algal production of DMSP. They show in their study there does not seem to be any effect of acidification or time on DMSP production. 
 
+First, I use a boxplot to show that there is a significant difference in the amount of DMSP produced by S. latissima depending on where along the frond Nunes et al. collected samples from. 
+```{r}
+boxplot(DMSP ~ Position, data = d2, xlab = "Position along the Frond", ylab = "DMSP Concentration (μg g-1)", main = "Difference in DMSP Concentration based on Location")
+
+# the boxplot clearly shows that concentrations of DMSP at the base of the frond are much greater than at the tip of the frond. 
+```
 
 ```{r}
 library(dplyr)
@@ -186,5 +192,19 @@ f2
 #f2 shows DMSP data from the tip of the frond. 
 ```
 
+```{r}
+mean1 <- mean(f1$DMSP, na.rm = TRUE) #mean DMSP for base of the frond
+mean1
+mean2 <- mean(f2$DMSP, na.rm = TRUE) #mean DMSP for the tip of the frond
+mean2
+
+#this is a simple quantification of what we see in the first boxplot. We can see that the mean DMSP concentration for the base of the frond is much greater than for the tip of the frond. 
+```
+
+```{r}
+par(mfrow = c(2,2))
+boxplot(DMSP ~ Duration, data = f1, xlab = "Time of Collection", ylab = "DMSP Levels", main = "DMSP levels at Base of Frond")
+boxplot(DMSP ~ Duration, data = f2, xlab = "Time of Collection", ylab = "DMSP Levels", main = "DMSP levels at Tip of Frond")
+```
 
 
