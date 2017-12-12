@@ -212,7 +212,30 @@ Next, they looked at how acidification and time affected DMSP levels. They did t
 ```{r}
 boxplot(DMSP ~ Duration, data = f1, xlab = "Time of Collection", ylab = "DMSP Levels", main = "DMSP levels at Base of Frond")
 
-#this boxplot helps to visually represent that no significant change occured between the DMSP levels collected at time 0 to time 4 (4 weeks after).
+#this boxplot helps to visually represent that no significant change occured between the DMSP levels collected at time 0 to time 4 (4 weeks after). We are now only looking at samples from the base of the frond.
 ```
 ```{r}
+time1 <- filter(f1, Duration == "0")
+time1
+```
+```{r}
+time2 <- filter(f1, Duration == "4")
+time2
+```
+```{r}
+dmmean1 <- mean(time1$DMSP, na.rm = TRUE)
+dmmean1
+sd1 <- sd(time1$DSMP, na.rm = TRUE)
+dmmean2 <- mean(time2$DMSP, na.rm = TRUE)
+dmmean2
+sd2 <- sd(time2$DMSP, na.rm = TRUE)
+n1 <- length(time1$DMSP)
+n2 <- length(time2$DMSP)
+mu <- 0
+```
+```{r}
+t <- t.test(x = time1$DMSP, y = time2$DMSP, mu = 0, alternative = "two.sided")
+t
 
+#we can use the t-test here to show that there really is not a significant change. The output p-value is 0.5915 which is insignificant. 
+```
